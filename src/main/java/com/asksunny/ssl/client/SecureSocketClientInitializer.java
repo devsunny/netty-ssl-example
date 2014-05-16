@@ -39,8 +39,9 @@ public class SecureSocketClientInitializer extends ChannelInitializer<SocketChan
          //       8192, Delimiters.lineDelimiter()));
         pipeline.addLast("length-decoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
         pipeline.addLast("String-decoder", new StringDecoder());        
-        pipeline.addLast("String-encoder", new StringEncoder());
+       
         pipeline.addLast("length-encoder", new LengthFieldPrepender(4));
+         pipeline.addLast("String-encoder", new StringEncoder());
         // and then business logic.
         pipeline.addLast("handler", new SecureSocketClientHandler());
     }
