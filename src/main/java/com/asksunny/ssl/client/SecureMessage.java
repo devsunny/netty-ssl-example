@@ -4,6 +4,7 @@ public class SecureMessage
 {
 	int code;
 	String payload;
+	
 	public int getCode() {
 		return code;
 	}

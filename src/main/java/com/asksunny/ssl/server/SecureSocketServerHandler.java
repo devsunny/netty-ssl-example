@@ -29,7 +29,8 @@ public class SecureSocketServerHandler extends SimpleChannelInboundHandler<Strin
 	@Override
 	protected void channelRead0(ChannelHandlerContext arg0, String arg1)
 			throws Exception {
+		System.out.println("&&&&&&&&&&&&");
 		System.out.println(arg1);
-		
+		arg0.writeAndFlush(arg1);
 	}
 }
