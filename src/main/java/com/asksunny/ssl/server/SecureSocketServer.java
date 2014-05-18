@@ -19,7 +19,7 @@ public class SecureSocketServer {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
              .channel(NioServerSocketChannel.class)
-             .childHandler(new SecureSocketServerLineBasedInitializer());
+             .childHandler(new SecureSocketServerLengthFrameInitializer());
 
             b.bind(port).sync().channel().closeFuture().sync();
         } finally {

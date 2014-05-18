@@ -51,11 +51,9 @@ public class SecureSocketPlainClient {
 		buf.setIndex(0, buf.readableBytes()-4);
 		buf.readBytes(this.clientOut, buf.readableBytes());
 		this.clientOut.flush();
-		buf.clear();
-		System.out.println("Hellllllllll");
+		buf.clear();		
 		readFull(buf, 4);
-		int len = buf.readInt();
-		System.out.println("Hellllllllll" + len);
+		int len = buf.readInt();		
 		buf.capacity(len+4);
 		readFull(buf, len);
 		response = new SecureMessage();

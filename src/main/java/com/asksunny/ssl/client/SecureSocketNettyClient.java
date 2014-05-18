@@ -41,8 +41,8 @@ public class SecureSocketNettyClient {
 				}
 
 				// Sends the received line to the server.
-				lastWriteFuture = ch.writeAndFlush(line + "\r\n");
-
+				lastWriteFuture = ch.writeAndFlush(line + "\n");
+				System.out.println(line + " sent.");
 				// If user typed the 'bye' command, wait until the server closes
 				// the connection.
 				if ("bye".equals(line.toLowerCase())) {
