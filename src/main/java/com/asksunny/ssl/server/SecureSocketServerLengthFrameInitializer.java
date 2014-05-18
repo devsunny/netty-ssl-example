@@ -46,10 +46,10 @@ public class SecureSocketServerLengthFrameInitializer extends ChannelInitializer
         //pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
        
         pipeline.addLast("length-decoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));  
-        pipeline.addLast("decoder", new StringDecoder());
+        //pipeline.addLast("decoder", new StringDecoder());
         pipeline.addLast("length-encoder", new LengthFieldPrepender(4));      
-        pipeline.addLast("encoder", new StringEncoder());          
+        //pipeline.addLast("encoder", new StringEncoder());          
         // and then business logic.
-        pipeline.addLast("handler", new SecureSocketServerHandler());
+        pipeline.addLast("handler", new SecureSocketServerhandler2());
     }
 }

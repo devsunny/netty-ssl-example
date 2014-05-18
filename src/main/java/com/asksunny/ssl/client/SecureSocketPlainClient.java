@@ -48,12 +48,13 @@ public class SecureSocketPlainClient {
 		if( request.getPayload()!=null){			
 			buf.writeBytes(request.getPayload().getBytes(Charset.defaultCharset()));
 		}
-		buf.setIndex(0, buf.readableBytes()-4);
+		System.out.println(buf.readableBytes());
+		buf.setInt(0, buf.readableBytes()-4);
 		buf.readBytes(this.clientOut, buf.readableBytes());
 		this.clientOut.flush();
-		buf.clear();		
+				
 		readFull(buf, 4);
-		int len = buf.readInt();		
+		int len = buf.readInt();
 		buf.capacity(len+4);
 		readFull(buf, len);
 		response = new SecureMessage();

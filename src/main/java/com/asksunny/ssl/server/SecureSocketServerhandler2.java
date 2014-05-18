@@ -1,18 +1,26 @@
 package com.asksunny.ssl.server;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
-
+import java.nio.charset.Charset;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 
-public class SecureSocketServerHandler extends SimpleChannelInboundHandler<String> {
+public class SecureSocketServerhandler2 extends
+		SimpleChannelInboundHandler<ByteBuf> {
 
-	final static Logger LOG = LoggerFactory.getLogger(SecureSocketServerHandler.class);
-
-   
+	final static Logger LOG = LoggerFactory.getLogger(SecureSocketServerhandler2.class);
+	
+	@Override
+	protected void channelRead0(ChannelHandlerContext arg0, ByteBuf arg1)
+			throws Exception {		
+		String request = arg1.toString(Charset.defaultCharset());
+		LOG.debug("REQUEST:" + request);
+		arg0.writeAndFlush(request.getBytes());
+	}
 
 	@Override
 	public boolean acceptInboundMessage(Object msg) throws Exception {
@@ -40,47 +48,33 @@ public class SecureSocketServerHandler extends SimpleChannelInboundHandler<Strin
 
 	@Override
 	public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
-		LOG.debug("channelRegistered:");
+		
 		super.channelRegistered(ctx);
 	}
 
 	@Override
 	public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-		LOG.debug("channelUnregistered:");
+	
 		super.channelUnregistered(ctx);
 	}
 
 	@Override
 	public void channelWritabilityChanged(ChannelHandlerContext ctx)
 			throws Exception {
-		LOG.debug("channelWritabilityChanged:");
+		// TODO Auto-generated method stub
 		super.channelWritabilityChanged(ctx);
 	}
 
-		@Override
-	public void userEventTriggered(ChannelHandlerContext ctx, Object evt)
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
 			throws Exception {
-		LOG.debug("userEventTriggered:");
-		super.userEventTriggered(ctx, evt);
+		ctx.close();
 	}
-	
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-    	LOG.debug(
-                "Unexpected exception from downstream.", cause);
-        ctx.close();
-    }
-
-
-
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext arg0, String arg1)
+	public void userEventTriggered(ChannelHandlerContext ctx, Object evt)
 			throws Exception {		
-		LOG.debug("userEventTriggered:");
-		System.out.println(arg1);
-		arg0.writeAndFlush(arg1);
 	}
-	
+
 	
 }
