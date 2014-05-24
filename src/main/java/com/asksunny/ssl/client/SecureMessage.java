@@ -16,7 +16,5 @@ public class SecureMessage
 	}
 	public void setPayload(String payload) {
 		this.payload = payload;
-	}
-	
-	
+	}	
 }

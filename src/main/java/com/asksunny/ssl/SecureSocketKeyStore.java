@@ -2,6 +2,7 @@ package com.asksunny.ssl;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.security.KeyStore;
 
 /**
  * A bogus key store which provides all the required information to create an
@@ -415,6 +416,19 @@ public class SecureSocketKeyStore {
 			(byte) 80, (byte) 26, (byte) 17, (byte) 143, (byte) 96, (byte) 16,
 			(byte) 204, (byte) 86, (byte) 61, (byte) 226, (byte) 149 };
 
+	
+	public static KeyStore getKeyStore()
+	{
+		KeyStore ks = null;
+		try{
+		ks = KeyStore.getInstance("JKS");
+        ks.load(asInputStream(), getKeyStorePassword());
+		}catch(Exception ex){
+			throw new RuntimeException("Failed to load SSL key store.", ex);
+		}
+        return ks;
+	}
+	
 	public static InputStream asInputStream() {		
 		return new ByteArrayInputStream(CERT_BYTES);
 	}
@@ -425,6 +439,14 @@ public class SecureSocketKeyStore {
 
 	public static char[] getKeyStorePassword() {
 		return "mu$tch8ng3".toCharArray();
+	}
+	
+	public static String getCertificatePasswordString() {
+		return "inc0rrect";
+	}
+
+	public static String getKeyStorePasswordString() {
+		return "mu$tch8ng3";
 	}
 
 	private SecureSocketKeyStore() {

@@ -16,9 +16,10 @@ public class SecureSocketServerhandler2 extends
 	
 	@Override
 	protected void channelRead0(ChannelHandlerContext arg0, ByteBuf arg1)
-			throws Exception {		
-		String request = arg1.toString(Charset.defaultCharset());
-		LOG.debug("REQUEST:" + request);
+			throws Exception 
+	{	
+		int code = arg1.readByte();
+		String request = arg1.toString(Charset.defaultCharset());		
 		arg0.writeAndFlush(request.getBytes());
 	}
 
