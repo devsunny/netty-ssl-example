@@ -9,6 +9,8 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.ssl.SslHandler;
@@ -26,30 +28,14 @@ public class SecureSocketServerLengthFrameInitializer extends ChannelInitializer
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
-
-        // Add SSL handler first to encrypt and decrypt everything.
-        // In this example, we use a bogus certificate in the server side
-        // and accept any invalid certificates in the client side.
-        // You will need something more complicated to identify both
-        // and server in the real world.
-        //
-        // Read SecureChatSslContextFactory
-        // if you need client certificate authentication.
-
         SSLEngine engine =
             SecureSocketSslContextFactory.getServerContext().createSSLEngine();
         engine.setUseClientMode(false);
-
-        pipeline.addLast("ssl", new SslHandler(engine));
-
-        // On top of the SSL handler, add the text line codec.
-        //pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
-       
-        pipeline.addLast("length-decoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));  
-        //pipeline.addLast("decoder", new StringDecoder());
-        pipeline.addLast("length-encoder", new LengthFieldPrepender(4));      
-        //pipeline.addLast("encoder", new StringEncoder());          
-        // and then business logic.
+        pipeline.addLast("ssl", new SslHandler(engine));  
+        pipeline.addLast("length-decoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4)); 
+        pipeline.addLast("bytearray-decoder", new ByteArrayDecoder());
+        pipeline.addLast("length-encoder", new LengthFieldPrepender(4));  
+        pipeline.addLast("bytearray-encoder", new ByteArrayEncoder());
         pipeline.addLast("handler", new SecureSocketServerhandler2());
     }
 }
